@@ -13,13 +13,20 @@ func Get(v interface{}, name string) (interface{}, error) {
 	nv := reflect.ValueOf(v)
 
 	switch nv.Kind() {
-	case reflect.Struct, reflect.Map, reflect.Array, reflect.Slice:
+	case reflect.Struct, reflect.Map, reflect.Array, reflect.Slice, reflect.Ptr:
 		for _, n := range ns {
-			switch nv.Kind() {
+			knd := nv.Kind()
+
+			if knd == reflect.Ptr {
+				nv = reflect.Indirect(nv)
+				knd = nv.Kind()
+			}
+
+			switch knd {
 			case reflect.Struct:
 				nv = nv.FieldByName(n)
 				if nv.Kind() == reflect.Invalid {
-					return nil, fmt.Errorf("invalid field: %s", name)
+					return nil, fmt.Errorf("invalid field: %s", n)
 				}
 			case reflect.Array, reflect.Slice:
 				i, err := strconv.Atoi(n)
@@ -67,6 +74,14 @@ func MustGet(v interface{}, name string) interface{} {
 	val, err := Get(v, name)
 	if err != nil {
 		panic(err)
+	}
+	return val
+}
+
+func GetWithDefault(v interface{}, name string, defaultValue interface{}) interface{} {
+	val, err := Get(v, name)
+	if err != nil {
+		return defaultValue
 	}
 	return val
 }
