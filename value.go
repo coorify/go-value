@@ -39,20 +39,10 @@ func Get(v interface{}, name string) (interface{}, error) {
 				}
 				nv = nv.Index(i)
 			case reflect.Map:
-				mk := reflect.ValueOf(n)
-				ks := nv.MapKeys()
 				fd := false
 
-				for _, k := range ks {
-					if k.CanInt() || k.CanUint() {
-						i, err := strconv.Atoi(n)
-						if err != nil {
-							return nil, err
-						}
-						mk = reflect.ValueOf(i)
-					}
-
-					if k.Convert(mk.Type()).Equal(mk) {
+				for _, k := range nv.MapKeys() {
+					if fmt.Sprint(k.Interface()) == n {
 						nv = nv.MapIndex(k)
 						fd = true
 						break

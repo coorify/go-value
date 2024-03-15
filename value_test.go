@@ -174,7 +174,7 @@ func TestGet(t *testing.T) {
 				path: "O0.A.D",
 			},
 			want:    nil,
-			wantErr: false,
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
