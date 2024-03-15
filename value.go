@@ -22,6 +22,10 @@ func Get(v interface{}, name string) (interface{}, error) {
 				knd = nv.Kind()
 			}
 
+			if !nv.IsValid() {
+				return nil, fmt.Errorf("invalid field: %s", n)
+			}
+
 			switch knd {
 			case reflect.Struct:
 				nv = nv.FieldByName(n)
@@ -62,7 +66,7 @@ func Get(v interface{}, name string) (interface{}, error) {
 		}
 
 		if !nv.IsValid() {
-			return nil, nil
+			return nil, fmt.Errorf("invalid field: %s", name)
 		} else if nv.CanInterface() {
 			return nv.Interface(), nil
 		}
