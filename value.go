@@ -14,7 +14,7 @@ func Get(v interface{}, name string) (interface{}, error) {
 
 	switch nv.Kind() {
 	case reflect.Struct, reflect.Map, reflect.Array, reflect.Slice, reflect.Ptr:
-		for _, n := range ns {
+		for idx, n := range ns {
 			knd := nv.Kind()
 
 			if knd == reflect.Ptr {
@@ -62,6 +62,8 @@ func Get(v interface{}, name string) (interface{}, error) {
 				if !fd {
 					return nil, fmt.Errorf("invalid field: %s", n)
 				}
+			default:
+				return nil, fmt.Errorf("invalid field: %s, should be struct,map,array", ns[idx-1])
 			}
 		}
 

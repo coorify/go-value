@@ -149,6 +149,33 @@ func TestGet(t *testing.T) {
 			want:    src.O4[2],
 			wantErr: false,
 		},
+		{
+			name: "struct nil",
+			args: args{
+				src:  src,
+				path: "O0.C",
+			},
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			name: "struct nil",
+			args: args{
+				src:  src,
+				path: "O0.C.D",
+			},
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			name: "struct nil",
+			args: args{
+				src:  src,
+				path: "O0.A.D",
+			},
+			want:    nil,
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
