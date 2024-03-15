@@ -60,7 +60,10 @@ func Get(v interface{}, name string) (interface{}, error) {
 				}
 			}
 		}
-		if nv.CanInterface() {
+
+		if !nv.IsValid() {
+			return nil, nil
+		} else if nv.CanInterface() {
 			return nv.Interface(), nil
 		}
 
